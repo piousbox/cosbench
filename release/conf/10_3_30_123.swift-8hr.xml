@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workload name="test" description="sample workload configuration">
+    <auth type="none" config=""/>
+    <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+    <workflow>
+        <workstage name="init" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+            <work name="init" type="init" workers="1" interval="5"
+                division="container" runtime="0" rampup="0" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="containers=r(1,4)">
+                <auth type="none" config=""/>
+                <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+                <operation type="init" ratio="100" division="container"
+                    config="objects=r(0,0);sizes=c(0)B;containers=r(1,4)" id="none"/>
+            </work>
+        </workstage>
+        <workstage name="prepare" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+            <work name="prepare" type="prepare" workers="1" interval="5"
+                division="object" runtime="0" rampup="0" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="containers=r(1,4);objects=r(1,4);sizes=u(1,2)MB">
+                <auth type="none" config=""/>
+                <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+                <operation type="prepare" ratio="100" division="object"
+                    config="createContainer=false;containers=r(1,4);objects=r(1,4);sizes=u(1,2)MB" id="none"/>
+            </work>
+        </workstage>
+        <workstage name="normal" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+            <work name="normal" type="normal" workers="1" interval="5"
+                division="none" runtime="11520" rampup="100"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0">
+                <auth type="none" config=""/>
+                <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+                <operation type="read" ratio="80" division="none"
+                    config="containers=u(1,4);objects=u(1,4);" id="none"/>
+                <operation type="write" ratio="20" division="none"
+                    config="containers=u(1,4);objects=u(1,4);sizes=u(1,2)MB" id="none"/>
+            </work>
+        </workstage>
+        <workstage name="cleanup" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+            <work name="cleanup" type="cleanup" workers="1" interval="5"
+                division="object" runtime="0" rampup="0" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="containers=r(1,4);objects=r(1,4);">
+                <auth type="none" config=""/>
+                <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+                <operation type="cleanup" ratio="100" division="object"
+                    config="deleteContainer=false;containers=r(1,4);objects=r(1,4);" id="none"/>
+            </work>
+        </workstage>
+        <workstage name="dispose" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+            <work name="dispose" type="dispose" workers="1" interval="5"
+                division="container" runtime="0" rampup="0" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="containers=r(1,4);">
+                <auth type="none" config=""/>
+                <storage type="swift" config="storage_url=http://10.3.30.230:9981/v1/test"/>
+                <operation type="dispose" ratio="100"
+                    division="container"
+                    config="objects=r(0,0);sizes=c(0)B;containers=r(1,4);" id="none"/>
+            </work>
+        </workstage>
+    </workflow>
+</workload>

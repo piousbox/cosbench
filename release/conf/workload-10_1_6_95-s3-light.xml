@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workload name="test" description="sample workload configuration">
+    <auth type="none" config=""/>
+    <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+    <workflow>
+        <workstage name="init" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+            <work name="init" type="init" workers="1" interval="5"
+                division="container" runtime="0" rampup="0" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="containers=r(1,32)">
+                <auth type="none" config=""/>
+                <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+                <operation type="init" ratio="100" division="container"
+                    config="objects=r(0,0);sizes=c(0)B;containers=r(1,32)" id="none"/>
+            </work>
+        </workstage>
+        <workstage name="prepare" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+            <work name="prepare" type="prepare" workers="1" interval="5"
+                division="object" runtime="0" rampup="0" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="containers=r(1,32);objects=r(1,50);sizes=u(64,64)KB">
+                <auth type="none" config=""/>
+                <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+                <operation type="prepare" ratio="100" division="object"
+                    config="createContainer=false;containers=r(1,32);objects=r(1,50);sizes=u(64,64)KB" id="none"/>
+            </work>
+        </workstage>
+        <workstage name="normal" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+            <work name="normal" type="normal" workers="8" interval="5"
+                division="none" runtime="300" rampup="100" rampdown="0"
+                afr="200000" totalOps="0" totalBytes="0">
+                <auth type="none" config=""/>
+                <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+                <operation type="read" ratio="80" division="none"
+                    config="containers=u(1,32);objects=u(1,50);" id="none"/>
+                <operation type="write" ratio="20" division="none"
+                    config="containers=u(1,32);objects=u(51,100);sizes=u(64,64)KB" id="none"/>
+            </work>
+        </workstage>
+        <workstage name="cleanup" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+            <work name="cleanup" type="cleanup" workers="1" interval="5"
+                division="object" runtime="0" rampup="0" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="containers=r(1,32);objects=r(1,100);">
+                <auth type="none" config=""/>
+                <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+                <operation type="cleanup" ratio="100" division="object"
+                    config="deleteContainer=false;containers=r(1,32);objects=r(1,100);" id="none"/>
+            </work>
+        </workstage>
+        <workstage name="dispose" closuredelay="0">
+            <auth type="none" config=""/>
+            <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+            <work name="dispose" type="dispose" workers="1" interval="5"
+                division="container" runtime="0" rampup="0" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="containers=r(1,32);">
+                <auth type="none" config=""/>
+                <storage type="s3" config="accesskey=nothing;secretkey=nothing-key;proxyport=9982;endpoint=http://10.3.30.123:9982"/>
+                <operation type="dispose" ratio="100"
+                    division="container"
+                    config="objects=r(0,0);sizes=c(0)B;containers=r(1,32);" id="none"/>
+            </work>
+        </workstage>
+    </workflow>
+</workload>
